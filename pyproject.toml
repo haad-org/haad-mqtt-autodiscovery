@@ -1,0 +1,13 @@
+[project]
+name = "haad-mqtt-autodiscovery"
+version = "0.1.0"
+description = "Home Assistant MQTT Auto-Discovery abstractions"
+authors = [
+    { name = "Markus Ressel", email = "mail+github@markusressel.de" }
+]
+requires-python = ">=3.14,<3.15"
+dependencies = []
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
