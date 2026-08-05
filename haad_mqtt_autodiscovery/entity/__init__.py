@@ -1,6 +1,6 @@
 import inspect
 import logging
-from typing import Optional, Callable, Awaitable, List, TYPE_CHECKING, Protocol
+from typing import Optional, Callable, Awaitable, List, TYPE_CHECKING, Protocol, Any
 from haad_mqtt_autodiscovery import MQTTDevice, MQTTDiscoveryPayload, EntityCategory
 
 class MQTTManagerProtocol(Protocol):
@@ -36,8 +36,8 @@ class MQTTEntity:
         self.initial_state = initial_state
         self.entity_category = entity_category
 
-        self._manager = None
-        self._ha = None
+        self._manager: Optional[MQTTManagerProtocol] = None
+        self._ha: Any = None
         self.state: Optional[str] = None
         self._state_listeners: List[Callable[[str, str, str], Awaitable[None]]] = []
 

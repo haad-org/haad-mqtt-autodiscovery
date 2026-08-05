@@ -86,7 +86,7 @@ class MQTTNumber(MQTTEntity):
         """Fired when HA sends a number command. Echo it to verify."""
         await self._publish_state(payload)
 
-    def get_state(self, default: float = None) -> Optional[float]:
+    def get_state(self, default: float = None) -> Optional[float]:  # type: ignore[override]
         state = self.state
         if state is None:
             return default

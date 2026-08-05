@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from typing import Dict, Any
 
-from haad_mqtt_autodiscovery import MQTTDiscoveryPayload
+from haad_mqtt_autodiscovery import MQTTDiscoveryPayload, MQTTDevice, EntityCategory
 from haad_mqtt_autodiscovery.entity import MQTTEntity
 
 @dataclass
@@ -14,8 +14,23 @@ class MQTTButtonPayload(MQTTDiscoveryPayload):
         return {k: v for k, v in asdict(self).items() if v is not None}
 
 class MQTTButton(MQTTEntity):
-    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, **kwargs):
-        super().__init__(namespace, identifier, name, "button", icon=icon, **kwargs)
+    def __init__(
+        self,
+        namespace: str,
+        identifier: str,
+        name: str,
+        icon: str = None,
+        entity_picture: str = None,
+        device: MQTTDevice = None,
+        unique_id: str = None,
+        initial_state: str = None,
+        entity_category: EntityCategory = None,
+    ):
+        super().__init__(
+            namespace, identifier, name, "button",
+            icon=icon, entity_picture=entity_picture, device=device,
+            unique_id=unique_id, initial_state=initial_state, entity_category=entity_category
+        )
 
     @property
     def command_topic(self) -> str:

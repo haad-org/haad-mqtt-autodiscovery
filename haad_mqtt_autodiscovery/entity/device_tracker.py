@@ -1,4 +1,4 @@
-from haad.util import serialization as json
+import json
 from dataclasses import dataclass
 from typing import Optional
 
