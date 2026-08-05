@@ -1,0 +1,51 @@
+from dataclasses import dataclass, asdict
+from typing import Dict, Any, Optional
+
+from haad_mqtt_autodiscovery import MQTTDiscoveryPayload, MQTTDevice
+from haad_mqtt_autodiscovery.entity import MQTTEntity
+
+
+@dataclass
+class MQTTDateTimePayload(MQTTDiscoveryPayload):
+    """Schema specific to MQTT Date/Time entities (Readable/Writable)."""
+    command_topic: str = ""
+
+    def to_json(self) -> Dict[str, Any]:
+        return {k: v for k, v in asdict(self).items() if v is not None}
+
+
+class MQTTDateTime(MQTTEntity):
+    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None):
+        # Maps to HA's 'datetime' MQTT platform, functioning like an input_datetime
+        super().__init__(namespace, identifier, name, "datetime", icon=icon, device=device, unique_id=unique_id)
+
+    @property
+    def command_topic(self) -> str:
+        return f"{self.base_topic}/set"
+
+    def get_discovery_payload(self) -> MQTTDateTimePayload:
+        return MQTTDateTimePayload(
+            name=self.name,
+            default_entity_id=self.entity_id,
+            unique_id=self.unique_id,
+            state_topic=self.state_topic,
+            command_topic=self.command_topic,
+            device=self.device
+        )
+
+    async def handle_command(self, payload: str):
+        """Fired when HA sends a datetime update. Echo it to verify."""
+        await self._publish_state(payload)
+
+    def get_state(self, default: str = None) -> Optional[str]:
+        state = self.state
+        if state is None:
+            return default
+        return state
+
+    async def set_state(self, dt_string: str):
+        """
+        Expects a parseable string layout.
+        Examples: '2026-07-10', '20:15:00', or '2026-07-10 20:15:00'
+        """
+        await self._publish_state(dt_string)
