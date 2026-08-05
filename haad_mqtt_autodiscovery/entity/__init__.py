@@ -127,8 +127,8 @@ class MQTTEntity:
             raise RuntimeError(f"Entity '{self.identifier}' must be registered before publishing state.")
         # Only publish to the broker. Let the state_topic subscription update local state.
         if self.state != state:
-            self.logger.debug(f"Publishing state change for {self.unique_id}: {state}")
-        await self._manager.set_state(self, state)
+            self.logger.info(f"Publishing state change for {self.unique_id}: {state}")
+            await self._manager.set_state(self, state)
 
     async def _publish_attributes(self, payload: str):
         if not self._manager:
