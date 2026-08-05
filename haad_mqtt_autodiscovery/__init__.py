@@ -20,6 +20,7 @@ class MQTTDevice:
     name: str = "MQTT Client"
     manufacturer: str = "Unknown"
     model: str = "v1.0"
+    suggested_area: Optional[str] = None
 
 
 class EntityCategory(str, Enum):
