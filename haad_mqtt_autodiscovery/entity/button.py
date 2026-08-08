@@ -10,8 +10,6 @@ class MQTTButtonPayload(MQTTDiscoveryPayload):
     command_topic: str = ""  # Required for buttons
     payload_press: str = "PRESS"
 
-    def to_json(self) -> Dict[str, Any]:
-        return {k: v for k, v in asdict(self).items() if v is not None}
 
 class MQTTButton(MQTTEntity):
     def __init__(

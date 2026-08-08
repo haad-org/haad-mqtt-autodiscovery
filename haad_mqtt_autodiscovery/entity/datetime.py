@@ -10,8 +10,6 @@ class MQTTDateTimePayload(MQTTDiscoveryPayload):
     """Schema specific to MQTT Date/Time entities (Readable/Writable)."""
     command_topic: str = ""
 
-    def to_json(self) -> Dict[str, Any]:
-        return {k: v for k, v in asdict(self).items() if v is not None}
 
 
 class MQTTDateTime(MQTTEntity):

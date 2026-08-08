@@ -16,8 +16,6 @@ class MQTTNumberPayload(MQTTDiscoveryPayload):
     mode: Optional[str] = None  # e.g., 'auto', 'box', 'slider'
     unit_of_measurement: Optional[str] = None
 
-    def to_json(self) -> Dict[str, Any]:
-        return {k: v for k, v in asdict(self).items() if v is not None}
 
 
 class MQTTNumber(MQTTEntity):

@@ -16,9 +16,6 @@ class MQTTSwitchPayload(MQTTDiscoveryPayload):
     payload_off: str = "OFF"
     optimistic: bool = False
 
-    def to_json(self) -> Dict[str, Any]:
-        # Filter out None values to keep the payload clean
-        return {k: v for k, v in asdict(self).items() if v is not None}
 
 
 class MQTTSwitch(MQTTEntity):

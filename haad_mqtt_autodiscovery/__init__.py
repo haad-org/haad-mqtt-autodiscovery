@@ -46,13 +46,15 @@ class MQTTDiscoveryPayload:
     json_attributes_topic: Optional[str] = None
 
     def to_json(self) -> Dict[str, Any]:
-        data = {}
-        for k, v in asdict(self).items():
-            if v is not None:
-                val = v.value if isinstance(v, Enum) else v
-                # If the category is CONTROLS, we omit it from the payload
-                # because HA defaults to "Controls" when no category is specified.
-                if k == "entity_category" and val == EntityCategory.CONTROLS.value:
-                    continue
-                data[k] = val
-        return data
+        def _factory(data):
+            res = {}
+            for k, v in data:
+                if v is not None:
+                    if isinstance(v, Enum):
+                        v = v.value
+                    if k == "entity_category" and v == EntityCategory.CONTROLS.value:
+                        continue
+                    res[k] = v
+            return res
+
+        return asdict(self, dict_factory=_factory)

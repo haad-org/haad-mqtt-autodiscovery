@@ -14,9 +14,6 @@ class MQTTTextPayload(MQTTDiscoveryPayload):
     max: Optional[int] = None
     pattern: Optional[str] = None
 
-    def to_json(self) -> Dict[str, Any]:
-        # Filter out None values to keep the payload clean
-        return {k: v for k, v in asdict(self).items() if v is not None}
 
 
 class MQTTText(MQTTEntity):
