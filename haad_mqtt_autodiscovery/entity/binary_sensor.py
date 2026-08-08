@@ -55,7 +55,9 @@ class MQTTBinarySensor(MQTTEntity):
         )
 
     def is_on(self) -> bool:
-        return self.state == STATE_ON.upper()
+        if self.state is None:
+            return False
+        return self.state.upper() == STATE_ON.upper()
 
     async def turn_on(self):
         await self._publish_state(STATE_ON.upper())
