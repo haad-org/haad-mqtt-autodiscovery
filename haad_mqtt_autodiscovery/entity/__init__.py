@@ -21,6 +21,7 @@ class MQTTEntity:
         entity_picture: Optional[str] = None,
         device: MQTTDevice = None,
         unique_id: Optional[str] = None,
+        area: Optional[str] = None,
         initial_state: str = None,
         entity_category: Optional[EntityCategory] = None,
     ):
@@ -33,6 +34,7 @@ class MQTTEntity:
         self.component = component
         self.device = device or self.DEFAULT_DEVICE
         self._unique_id = unique_id
+        self.area = area
         self.initial_state = initial_state
         self.entity_category = entity_category
 

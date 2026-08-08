@@ -27,9 +27,9 @@ class MQTTSensor(MQTTEntity):
         state_class: Optional[str] = None,
         icon: Optional[str] = None,
         entity_picture: Optional[str] = None,
-        unique_id: str = None
+        unique_id: str = None, area: Optional[str] = None
     ):
-        super().__init__(namespace, identifier, name, "sensor", device=device, unique_id=unique_id, icon=icon, entity_picture=entity_picture)
+        super().__init__(namespace, identifier, name, "sensor", device=device, unique_id=unique_id, area=area, icon=icon, entity_picture=entity_picture)
         self.device_class = device_class
         self.unit_of_measurement = unit_of_measurement
         self.state_class = state_class
@@ -46,6 +46,7 @@ class MQTTSensor(MQTTEntity):
             unit_of_measurement=self.unit_of_measurement,
             state_class=self.state_class,
             icon=self.icon,
+            suggested_area=self.area,
             entity_picture=self.absolute_entity_picture
         )
 

@@ -32,7 +32,7 @@ class MQTTNumber(MQTTEntity):
         unit_of_measurement: Optional[str] = None,
         icon: Optional[str] = None,
         entity_picture: Optional[str] = None,
-        unique_id: Optional[str] = None,
+        unique_id: Optional[str] = None, area: Optional[str] = None,
         initial_state: Optional[float] = None,
         entity_category: Optional[EntityCategory] = None
     ):
@@ -49,7 +49,7 @@ class MQTTNumber(MQTTEntity):
                     raise ValueError(f"initial_state {initial_state} does not align with step {step} for {identifier}")
 
         initial_state_str = str(initial_state) if initial_state is not None else None
-        super().__init__(namespace, identifier, name, "number", icon=icon, entity_picture=entity_picture, device=device, unique_id=unique_id, initial_state=initial_state_str,
+        super().__init__(namespace, identifier, name, "number", icon=icon, entity_picture=entity_picture, device=device, unique_id=unique_id, area=area, initial_state=initial_state_str,
                          entity_category=entity_category)
         self.min = min_val
         self.max = max_val
@@ -71,6 +71,7 @@ class MQTTNumber(MQTTEntity):
             json_attributes_topic=self.json_attributes_topic if self.entity_picture else None,
             device=self.device,
             icon=self.icon,
+            suggested_area=self.area,
             entity_picture=self.absolute_entity_picture,
             entity_category=self.entity_category,
             min=self.min,

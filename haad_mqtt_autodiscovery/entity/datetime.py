@@ -13,9 +13,9 @@ class MQTTDateTimePayload(MQTTDiscoveryPayload):
 
 
 class MQTTDateTime(MQTTEntity):
-    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None):
+    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None, area: Optional[str] = None):
         # Maps to HA's 'datetime' MQTT platform, functioning like an input_datetime
-        super().__init__(namespace, identifier, name, "datetime", icon=icon, device=device, unique_id=unique_id)
+        super().__init__(namespace, identifier, name, "datetime", icon=icon, device=device, unique_id=unique_id, area=area)
 
     @property
     def command_topic(self) -> str:

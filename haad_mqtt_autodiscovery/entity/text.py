@@ -17,8 +17,8 @@ class MQTTTextPayload(MQTTDiscoveryPayload):
 
 
 class MQTTText(MQTTEntity):
-    def __init__(self, namespace: str, identifier: str, name: str, device: MQTTDevice = None, unique_id: str = None, entity_category: EntityCategory = None, mode: str = "text"):
-        super().__init__(namespace, identifier, name, "text", icon=None, device=device, unique_id=unique_id, entity_category=entity_category)
+    def __init__(self, namespace: str, identifier: str, name: str, device: MQTTDevice = None, unique_id: str = None, area: Optional[str] = None, entity_category: EntityCategory = None, mode: str = "text"):
+        super().__init__(namespace, identifier, name, "text", icon=None, device=device, unique_id=unique_id, area=area, entity_category=entity_category)
         self.mode = mode
 
     @property
@@ -34,6 +34,7 @@ class MQTTText(MQTTEntity):
             command_topic=self.command_topic,
             device=self.device,
             icon=self.icon,
+            suggested_area=self.area,
             entity_category=self.entity_category,
             mode=self.mode
         )

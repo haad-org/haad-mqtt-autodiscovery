@@ -44,6 +44,7 @@ class MQTTDiscoveryPayload:
     entity_picture: Optional[str] = None
     entity_category: Optional[EntityCategory] = None
     json_attributes_topic: Optional[str] = None
+    suggested_area: Optional[str] = None
 
     def to_json(self) -> Dict[str, Any]:
         def _factory(data):

@@ -13,10 +13,10 @@ class MQTTTimePayload(MQTTDiscoveryPayload):
 
 
 class MQTTTime(MQTTEntity):
-    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None, initial_state: str = None,
+    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None, area: Optional[str] = None, initial_state: str = None,
                  entity_category: EntityCategory = None):
         # Maps to HA's 'time' MQTT platform, functioning like an input_datetime with has_date=false
-        super().__init__(namespace, identifier, name, "time", icon=icon, device=device, unique_id=unique_id, initial_state=initial_state, entity_category=entity_category)
+        super().__init__(namespace, identifier, name, "time", icon=icon, device=device, unique_id=unique_id, area=area, initial_state=initial_state, entity_category=entity_category)
 
     @property
     def command_topic(self) -> str:
@@ -31,6 +31,7 @@ class MQTTTime(MQTTEntity):
             command_topic=self.command_topic,
             device=self.device,
             icon=self.icon,
+            suggested_area=self.area,
             entity_category=self.entity_category
         )
 

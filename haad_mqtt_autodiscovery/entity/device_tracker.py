@@ -13,8 +13,8 @@ class MQTTDeviceTrackerPayload(MQTTDiscoveryPayload):
 
 
 class MQTTDeviceTracker(MQTTEntity):
-    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None, entity_category: EntityCategory = None):
-        super().__init__(namespace, identifier, name, "device_tracker", icon=icon, device=device, unique_id=unique_id, entity_category=entity_category)
+    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None, area: Optional[str] = None, entity_category: EntityCategory = None):
+        super().__init__(namespace, identifier, name, "device_tracker", icon=icon, device=device, unique_id=unique_id, area=area, entity_category=entity_category)
 
     def get_discovery_payload(self) -> MQTTDeviceTrackerPayload:
         return MQTTDeviceTrackerPayload(
@@ -25,6 +25,7 @@ class MQTTDeviceTracker(MQTTEntity):
             json_attributes_topic=self.json_attributes_topic,
             device=self.device,
             icon=self.icon,
+            suggested_area=self.area,
             entity_category=self.entity_category,
             source_type="gps"
         )

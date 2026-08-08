@@ -25,7 +25,8 @@ class MQTTBinarySensor(MQTTEntity):
         entity_picture: Optional[str] = None,
         device: MQTTDevice = None,
         device_class: Optional[str] = None,
-        unique_id: str = None
+        unique_id: str = None,
+        area: Optional[str] = None
     ):
         super().__init__(
             namespace,
@@ -35,7 +36,8 @@ class MQTTBinarySensor(MQTTEntity):
             icon=icon,
             entity_picture=entity_picture,
             device=device,
-            unique_id=unique_id
+            unique_id=unique_id,
+            area=area
         )
         self.device_class = device_class
 

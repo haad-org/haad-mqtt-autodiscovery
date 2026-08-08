@@ -20,14 +20,14 @@ class MQTTButton(MQTTEntity):
         icon: str = None,
         entity_picture: str = None,
         device: MQTTDevice = None,
-        unique_id: str = None,
+        unique_id: str = None, area: Optional[str] = None,
         initial_state: str = None,
         entity_category: EntityCategory = None,
     ):
         super().__init__(
             namespace, identifier, name, "button",
             icon=icon, entity_picture=entity_picture, device=device,
-            unique_id=unique_id, initial_state=initial_state, entity_category=entity_category
+            unique_id=unique_id, area=area, initial_state=initial_state, entity_category=entity_category
         )
 
     @property
@@ -44,6 +44,7 @@ class MQTTButton(MQTTEntity):
             json_attributes_topic=self.json_attributes_topic if self.entity_picture else None,
             device=self.device,
             icon=self.icon,
+            suggested_area=self.area,
             entity_picture=self.absolute_entity_picture,
             entity_category=self.entity_category
         )
