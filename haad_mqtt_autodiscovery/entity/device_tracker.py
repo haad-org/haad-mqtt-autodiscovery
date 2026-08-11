@@ -65,5 +65,17 @@ class MQTTDeviceTracker(MQTTEntity):
         await self._publish_state(location_name if location_name else "not_home")
 
     async def is_home(self) -> bool:
-        state = self.get_state()
+        state = await self.get_state()
         return state == "home"
+
+    async def get_last_known_location(self) -> Optional[dict]:
+        # TODO: get_attributes doesn't exist yet
+        attributes = await self.get_attributes()
+        if not attributes:
+            return None
+        return {
+            "latitude": attributes.get("latitude"),
+            "longitude": attributes.get("longitude"),
+            "gps_accuracy": attributes.get("gps_accuracy"),
+            "location_name": attributes.get("location_name"),
+        }
