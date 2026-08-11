@@ -21,12 +21,12 @@ class MQTTBinarySensor(MQTTEntity):
         namespace: str,
         identifier: str,
         name: str,
-        icon: Optional[str] = None,
-        entity_picture: Optional[str] = None,
-        device: MQTTDevice = None,
-        device_class: Optional[str] = None,
-        unique_id: str = None,
-        area: Optional[str] = None
+        icon: str | None = None,
+        entity_picture: str | None = None,
+        device: MQTTDevice | None = None,
+        device_class: str | None = None,
+        unique_id: str | None = None,
+        area: str | None = None
     ):
         super().__init__(
             namespace,

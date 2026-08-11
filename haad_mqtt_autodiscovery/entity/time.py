@@ -1,5 +1,5 @@
-from dataclasses import dataclass, asdict
-from typing import Dict, Any, Optional
+from dataclasses import dataclass
+from typing import Optional
 
 from haad_mqtt_autodiscovery import MQTTDiscoveryPayload, MQTTDevice, EntityCategory
 from haad_mqtt_autodiscovery.entity import MQTTEntity
@@ -11,12 +11,27 @@ class MQTTTimePayload(MQTTDiscoveryPayload):
     command_topic: str = ""
 
 
-
 class MQTTTime(MQTTEntity):
-    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, device: MQTTDevice = None, unique_id: str = None, area: Optional[str] = None, initial_state: str = None,
-                 entity_category: EntityCategory = None):
+    def __init__(
+        self,
+        namespace: str,
+        identifier: str,
+        name: str,
+        icon: str | None = None,
+        entity_picture: str | None = None,
+        device: MQTTDevice | None = None,
+        unique_id: str | None = None,
+        area: str | None = None,
+        initial_state: str | None = None,
+        entity_category: EntityCategory | None = None
+    ):
         # Maps to HA's 'time' MQTT platform, functioning like an input_datetime with has_date=false
-        super().__init__(namespace, identifier, name, "time", icon=icon, device=device, unique_id=unique_id, area=area, initial_state=initial_state, entity_category=entity_category)
+        super().__init__(
+            namespace, identifier, name, component="time",
+            icon=icon, entity_picture=entity_picture,
+            device=device, unique_id=unique_id, area=area, initial_state=initial_state,
+            entity_category=entity_category
+        )
 
     @property
     def command_topic(self) -> str:
@@ -31,6 +46,7 @@ class MQTTTime(MQTTEntity):
             command_topic=self.command_topic,
             device=self.device,
             icon=self.icon,
+            entity_picture=self.absolute_entity_picture,
             suggested_area=self.area,
             entity_category=self.entity_category
         )

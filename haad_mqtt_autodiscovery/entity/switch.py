@@ -1,5 +1,5 @@
-from dataclasses import dataclass, asdict
-from typing import Dict, Any
+from dataclasses import dataclass
+from typing import Optional
 
 STATE_ON = 'on'
 STATE_OFF = 'off'
@@ -17,13 +17,27 @@ class MQTTSwitchPayload(MQTTDiscoveryPayload):
     optimistic: bool = False
 
 
-
 class MQTTSwitch(MQTTEntity):
-    def __init__(self, namespace: str, identifier: str, name: str, icon: str = None, entity_picture: str = None, device: MQTTDevice = None, unique_id: str = None, area: Optional[str] = None,
-                 entity_category: EntityCategory = None, initial_state: str | bool = False):
+    def __init__(
+        self,
+        namespace: str,
+        identifier: str,
+        name: str,
+        icon: str | None = None,
+        entity_picture: str | None = None,
+        device: MQTTDevice | None = None,
+        unique_id: str | None = None,
+        area: Optional[str] = None,
+        entity_category: EntityCategory | None = None,
+        initial_state: str | bool = False
+    ):
         parsed_initial_state = parse_to_mqtt_on_off_state(initial_state)
-        super().__init__(namespace, identifier, name, "switch", icon=icon, entity_picture=entity_picture, device=device, unique_id=unique_id, area=area, entity_category=entity_category,
-                         initial_state=parsed_initial_state)
+        super().__init__(
+            namespace, identifier, name, component="switch",
+            icon=icon, entity_picture=entity_picture, device=device, unique_id=unique_id, area=area,
+            entity_category=entity_category,
+            initial_state=parsed_initial_state
+        )
 
     @property
     def command_topic(self) -> str:

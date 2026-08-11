@@ -1,8 +1,8 @@
-from dataclasses import dataclass, asdict
-from typing import Dict, Any
+from dataclasses import dataclass
 
 from haad_mqtt_autodiscovery import MQTTDiscoveryPayload, MQTTDevice, EntityCategory
 from haad_mqtt_autodiscovery.entity import MQTTEntity
+
 
 @dataclass
 class MQTTButtonPayload(MQTTDiscoveryPayload):
@@ -17,12 +17,13 @@ class MQTTButton(MQTTEntity):
         namespace: str,
         identifier: str,
         name: str,
-        icon: str = None,
-        entity_picture: str = None,
-        device: MQTTDevice = None,
-        unique_id: str = None, area: Optional[str] = None,
-        initial_state: str = None,
-        entity_category: EntityCategory = None,
+        icon: str | None = None,
+        entity_picture: str | None = None,
+        device: MQTTDevice | None = None,
+        unique_id: str | None = None,
+        area: str | None = None,
+        initial_state: str | None = None,
+        entity_category: EntityCategory | None = None,
     ):
         super().__init__(
             namespace, identifier, name, "button",
@@ -44,7 +45,7 @@ class MQTTButton(MQTTEntity):
             json_attributes_topic=self.json_attributes_topic if self.entity_picture else None,
             device=self.device,
             icon=self.icon,
-            suggested_area=self.area,
             entity_picture=self.absolute_entity_picture,
+            suggested_area=self.area,
             entity_category=self.entity_category
         )

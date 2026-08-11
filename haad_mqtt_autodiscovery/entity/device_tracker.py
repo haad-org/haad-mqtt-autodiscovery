@@ -28,13 +28,18 @@ class MQTTDeviceTracker(MQTTEntity):
         identifier: str,
         name: str,
         icon: str | None = None,
+        entity_picture: str | None = None,
         device: MQTTDevice | None = None,
         unique_id: str | None = None,
         area: Optional[str] = None,
         entity_category: EntityCategory | None = None,
         source_type: DeviceTrackerSourceType = DeviceTrackerSourceType.GPS,
     ):
-        super().__init__(namespace, identifier, name, "device_tracker", icon=icon, device=device, unique_id=unique_id, area=area, entity_category=entity_category)
+        super().__init__(
+            namespace, identifier, name, component="device_tracker",
+            icon=icon, entity_picture=entity_picture, device=device, unique_id=unique_id, area=area,
+            entity_category=entity_category
+        )
         self.source_type = source_type
 
     def get_discovery_payload(self) -> MQTTDeviceTrackerPayload:
@@ -46,6 +51,7 @@ class MQTTDeviceTracker(MQTTEntity):
             json_attributes_topic=self.json_attributes_topic,
             device=self.device,
             icon=self.icon,
+            entity_picture=self.absolute_entity_picture,
             suggested_area=self.area,
             entity_category=self.entity_category,
             source_type=self.source_type.value
@@ -77,7 +83,7 @@ class MQTTDeviceTracker(MQTTEntity):
         await self._publish_state(location_name if location_name else "not_home")
 
     async def is_home(self) -> bool:
-        state = await self.get_state()
+        state = self.get_state()
         return state == "home"
 
     async def get_last_known_location(self) -> Optional[dict]:
