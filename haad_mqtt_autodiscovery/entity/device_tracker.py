@@ -51,13 +51,25 @@ class MQTTDeviceTracker(MQTTEntity):
             source_type=self.source_type.value
         )
 
-    async def set_location(self, latitude: float, longitude: float, gps_accuracy: float = 10, location_name: Optional[str] = None):
+    async def set_location(
+        self,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
+        gps_accuracy: Optional[float] = None,
+        location_name: Optional[str] = None
+    ):
+        # Start with the base payload
         payload = {
-            "latitude": latitude,
-            "longitude": longitude,
-            "gps_accuracy": gps_accuracy,
             "source_type": self.source_type.value,
         }
+
+        # Only add coordinates if they are explicitly provided
+        if latitude is not None:
+            payload["latitude"] = latitude
+        if longitude is not None:
+            payload["longitude"] = longitude
+        if gps_accuracy is not None:
+            payload["gps_accuracy"] = gps_accuracy
         if location_name:
             payload["location_name"] = location_name
 
@@ -74,8 +86,8 @@ class MQTTDeviceTracker(MQTTEntity):
         if not attributes:
             return None
         return {
-            "latitude": attributes.get("latitude"),
-            "longitude": attributes.get("longitude"),
-            "gps_accuracy": attributes.get("gps_accuracy"),
+            "latitude": float(attributes.get("latitude")),
+            "longitude": float(attributes.get("longitude")),
+            "gps_accuracy": float(attributes.get("gps_accuracy")) if attributes.get("gps_accuracy") is not None else None,
             "location_name": attributes.get("location_name"),
         }
