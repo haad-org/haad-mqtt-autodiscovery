@@ -1,7 +1,9 @@
 import inspect
 import logging
-from typing import Optional, Callable, Awaitable, List, TYPE_CHECKING, Protocol, Any
+from typing import Optional, Callable, Awaitable, List, Protocol, Any
+
 from haad_mqtt_autodiscovery import MQTTDevice, MQTTDiscoveryPayload, EntityCategory
+
 
 class MQTTManagerProtocol(Protocol):
     async def set_state(self, entity: 'MQTTEntity', state: str) -> None: ...
@@ -17,13 +19,13 @@ class MQTTEntity:
         identifier: str,
         name: str,
         component: str,
-        icon: Optional[str] = None,
-        entity_picture: Optional[str] = None,
-        device: MQTTDevice = None,
-        unique_id: Optional[str] = None,
-        area: Optional[str] = None,
-        initial_state: str = None,
-        entity_category: Optional[EntityCategory] = None,
+        icon: str | None = None,
+        entity_picture: str | None = None,
+        device: MQTTDevice | None = None,
+        unique_id: str | None = None,
+        area: str | None = None,
+        initial_state: str | None = None,
+        entity_category: EntityCategory | None = None,
     ):
         self.logger = logging.getLogger(f"mqttentity.{namespace}.{identifier}")
         self.namespace = namespace
