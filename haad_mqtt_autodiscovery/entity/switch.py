@@ -63,7 +63,7 @@ class MQTTSwitch(MQTTEntity):
         """Fired when HA sends a command. We echo it to the broker to verify it."""
         await self._publish_state(payload)
 
-    def is_on(self) -> bool:
+    async def is_on(self) -> bool:
         current_state = self.state or ""
         return current_state.upper() == STATE_ON.upper()
 
@@ -81,7 +81,7 @@ class MQTTSwitch(MQTTEntity):
         await self._publish_state(STATE_OFF.upper())
 
     async def toggle(self):
-        if self.is_on():
+        if await self.is_on():
             await self.turn_off()
         else:
             await self.turn_on()

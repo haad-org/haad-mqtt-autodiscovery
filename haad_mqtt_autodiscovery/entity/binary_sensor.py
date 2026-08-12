@@ -56,7 +56,7 @@ class MQTTBinarySensor(MQTTEntity):
             entity_picture=self.absolute_entity_picture,
         )
 
-    def is_on(self) -> bool:
+    async def is_on(self) -> bool:
         if self.state is None:
             return False
         return self.state.upper() == STATE_ON.upper()
