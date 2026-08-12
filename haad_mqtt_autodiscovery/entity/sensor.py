@@ -54,11 +54,11 @@ class MQTTSensor(MQTTEntity):
             suggested_area=self.area,
         )
 
-    def get_state(self, default: str = None) -> Optional[str]:
-        state = self.state
-        if state is None:
+    async def get_state(self, default: str = None) -> Optional[str]:
+        val = await super().get_state()
+        if val is None:
             return default
-        return state
+        return val
 
     async def set_state(self, value: Any):
         """Helper to cast values to strings before publishing."""

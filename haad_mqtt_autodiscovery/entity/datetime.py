@@ -51,11 +51,11 @@ class MQTTDateTime(MQTTEntity):
         """Fired when HA sends a datetime update. Echo it to verify."""
         await self._publish_state(payload)
 
-    def get_state(self, default: str = None) -> Optional[str]:
-        state = self.state
-        if state is None:
+    async def get_state(self, default: str = None) -> Optional[str]:
+        val = await super().get_state()
+        if val is None:
             return default
-        return state
+        return val
 
     async def set_state(self, dt_string: str):
         """

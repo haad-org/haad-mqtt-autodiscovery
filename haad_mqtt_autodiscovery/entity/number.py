@@ -88,7 +88,7 @@ class MQTTNumber(MQTTEntity):
         """Fired when HA sends a number command. Echo it to verify."""
         await self._publish_state(payload)
 
-    def get_state(self, default: float = None) -> Optional[float]:  # type: ignore[override]
+    async def get_state(self, default: float = None) -> Optional[float]:  # type: ignore[override]
         state = self.state
         if state is None:
             return default
@@ -126,7 +126,7 @@ class MQTTNumber(MQTTEntity):
     async def increment(self):
         """Increment the number by step."""
         step = self.step if self.step is not None else 1.0
-        current = self.get_state(self._numeric_initial_state())
+        current = await self.get_state(self._numeric_initial_state())
         new_val = current + step
         if self.max is not None and new_val > self.max:
             new_val = self.max
@@ -135,7 +135,7 @@ class MQTTNumber(MQTTEntity):
     async def decrement(self):
         """Decrement the number by step."""
         step = self.step if self.step is not None else 1.0
-        current = self.get_state(self._numeric_initial_state())
+        current = await self.get_state(self._numeric_initial_state())
         new_val = current - step
         if self.min is not None and new_val < self.min:
             new_val = self.min

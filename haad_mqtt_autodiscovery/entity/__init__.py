@@ -1,4 +1,5 @@
 import inspect
+import json
 import logging
 from typing import Optional, Callable, Awaitable, List, Protocol, Any
 
@@ -43,6 +44,7 @@ class MQTTEntity:
         self._manager: Optional[MQTTManagerProtocol] = None
         self._ha: Any = None
         self.state: Optional[str] = None
+        self.attributes: dict = {}
         self._state_listeners: List[Callable[[str, str, str], Awaitable[None]]] = []
 
     def get_discovery_payload(self) -> MQTTDiscoveryPayload:
@@ -87,8 +89,14 @@ class MQTTEntity:
     def bind_manager(self, manager: MQTTManagerProtocol):
         self._manager = manager
 
-    def get_state(self) -> Optional[str]:
+    async def get_state(self) -> Optional[str]:
         return self.state
+        
+    async def get_attributes(self) -> dict:
+        """
+        Returns the most recently known attributes from the MQTT broker.
+        """
+        return self.attributes
 
     def listen_state(self, callback: Callable[[str, str, str], Awaitable[None]]):
         self._state_listeners.append(callback)
@@ -138,3 +146,13 @@ class MQTTEntity:
         if not self._manager:
             raise RuntimeError(f"Entity '{self.identifier}' must be registered before publishing attributes.")
         await self._manager.set_attributes(self, payload)
+
+    async def handle_attribute_sync(self, payload: str, retain: bool = False):
+        """Fired automatically when the MQTT Manager receives a message on the json_attributes_topic."""
+        try:
+            new_attributes = json.loads(payload)
+            if isinstance(new_attributes, dict):
+                self.attributes = new_attributes
+                self.logger.debug(f"Attribute sync for {self.unique_id}: {self.attributes}")
+        except Exception as e:
+            self.logger.error(f"Failed to parse attribute sync payload for {self.unique_id}: {e}")
