@@ -67,9 +67,13 @@ class MQTTSwitch(MQTTEntity):
         current_state = self.state or ""
         return current_state.upper() == STATE_ON.upper()
 
-    async def handle_state_sync(self, payload: str, retain: bool = False):
+    def normalize_state_payload(self, payload: str) -> str:
         if payload and payload.upper() in (STATE_ON.upper(), STATE_OFF.upper()):
-            payload = payload.upper()
+            return payload.upper()
+        return payload
+
+    async def handle_state_sync(self, payload: str, retain: bool = False):
+        payload = self.normalize_state_payload(payload)
         await super().handle_state_sync(payload, retain)
 
     async def set_state(self, state: str | bool):
