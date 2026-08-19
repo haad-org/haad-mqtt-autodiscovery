@@ -61,6 +61,11 @@ class MQTTBinarySensor(MQTTEntity):
             return False
         return self.state.upper() == STATE_ON.upper()
 
+    async def handle_state_sync(self, payload: str, retain: bool = False):
+        if payload and payload.upper() in (STATE_ON.upper(), STATE_OFF.upper()):
+            payload = payload.upper()
+        await super().handle_state_sync(payload, retain)
+
     async def turn_on(self):
         await self._publish_state(STATE_ON.upper())
 
