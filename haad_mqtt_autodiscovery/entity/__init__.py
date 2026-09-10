@@ -156,3 +156,6 @@ class MQTTEntity:
                 self.logger.debug(f"Attribute sync for {self.unique_id}: {self.attributes}")
         except Exception as e:
             self.logger.error(f"Failed to parse attribute sync payload for {self.unique_id}: {e}")
+
+from .select import MQTTSelect, MQTTSelectPayload
+__all__ = ["MQTTEntity", "MQTTSelect", "MQTTSelectPayload"]
