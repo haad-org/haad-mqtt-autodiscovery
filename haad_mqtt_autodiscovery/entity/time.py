@@ -55,6 +55,11 @@ class MQTTTime(MQTTEntity):
         """Fired when HA sends a time update. Echo it to verify."""
         await self._publish_state(payload)
 
+    
+    async def set_state(self, time_string: str):
+        """Update the time state directly from the backend."""
+        await self._publish_state(time_string)
+
     async def get_state(self, default: str = None) -> Optional[str]:
         val = await super().get_state()
         if val is None:
