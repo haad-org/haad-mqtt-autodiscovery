@@ -44,6 +44,8 @@ class MQTTEntity:
         self._manager: Optional[MQTTManagerProtocol] = None
         self._ha: Any = None
         self.state: Optional[str] = None
+        # States published but not synced back from the broker yet (oldest first), see _publish_state()
+        self._pending_states: List[str] = []
         self.attributes: dict = {}
         self._state_listeners: List[Callable[[str, str, str], Awaitable[None]]] = []
 
@@ -105,6 +107,7 @@ class MQTTEntity:
         """Fired automatically when the MQTT Manager receives a message on the state_topic."""
         if payload in ("unknown", "unavailable"):
             return
+        self._track_synced_state(payload)
 
         old_state = self.state
         new_state = payload
@@ -138,9 +141,32 @@ class MQTTEntity:
         if not self._manager:
             raise RuntimeError(f"Entity '{self.identifier}' must be registered before publishing state.")
         # Only publish to the broker. Let the state_topic subscription update local state.
-        if self.state != state:
-            self.logger.info(f"Publishing state change for {self.unique_id}: {self.state} -> {state}")
+        # self.state only follows once the broker sent the state back, so compare with the newest state still on its
+        # way: comparing with self.state would drop a change back to the synced state while another one is pending.
+        expected_state = self.target_state
+        if expected_state != state:
+            self.logger.info(f"Publishing state change for {self.unique_id}: {expected_state} -> {state}")
+            self._pending_states.append(state)
             await self._manager.set_state(self, state)
+
+    @property
+    def target_state(self) -> Optional[str]:
+        """
+        The state this entity is heading to: the newest state published by this process that hasn't come back from
+        the broker yet, otherwise the synced state. Unlike `state`, it doesn't go back to an old value while the
+        broker still delivers states published earlier.
+        """
+        return self._pending_states[-1] if self._pending_states else self.state
+
+    def _track_synced_state(self, payload: str):
+        """
+        Call for every state synced from the broker. A published state coming back confirms it (and the ones before);
+        any other state was set elsewhere (e.g. in Home Assistant) and replaces whatever was still on its way.
+        """
+        if payload in self._pending_states:
+            del self._pending_states[:self._pending_states.index(payload) + 1]
+        else:
+            self._pending_states.clear()
 
     async def _publish_attributes(self, payload: str):
         if not self._manager:
