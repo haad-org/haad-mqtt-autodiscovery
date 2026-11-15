@@ -12,6 +12,8 @@ class MQTTManagerProtocol(Protocol):
 
 class MQTTEntity:
     discovery_prefix = "homeassistant"
+    retain_state = True
+    """Whether managers publish the state retained, so it survives restarts (not for events)."""
     DEFAULT_DEVICE = MQTTDevice(identifiers=["custom_mqtt_client"], name="MQTT Client", manufacturer="Unknown", model="v1.0")
 
     def __init__(
